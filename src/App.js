@@ -40,7 +40,7 @@ function categorizeTasksByDeadline(tasks) {
     dueNextWeek: [],
     future: [],
   };
-  tasks.forEach(task => {
+  tasks.forEach((task) => {
     if (!task.deadline) {
       categories.future.push(task);
       return;
@@ -107,7 +107,7 @@ function App() {
     display: "flex",
     width: "100%",
     minHeight: "100vh",
-    backgroundColor: "#F0F2F5"
+    backgroundColor: "#F0F2F5",
   };
 
   const authLeftStyle = {
@@ -118,7 +118,7 @@ function App() {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
   };
 
   const authRightStyle = {
@@ -127,7 +127,7 @@ function App() {
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    padding: "20px"
+    padding: "20px",
   };
 
   const authRightImgStyle = {
@@ -135,20 +135,20 @@ function App() {
     maxWidth: "70%",
     maxHeight: "70%",
     objectFit: "contain",
-    opacity: 0.8
+    opacity: 0.8,
   };
 
   const authHeadingStyle = {
     fontSize: "24px",
     marginBottom: "10px",
     fontWeight: 600,
-    color: "#333"
+    color: "#333",
   };
 
   const authSubHeadingStyle = {
     fontSize: "14px",
     color: "#777",
-    marginBottom: "20px"
+    marginBottom: "20px",
   };
 
   const inputStyle = {
@@ -156,7 +156,7 @@ function App() {
     border: "1px solid #ccc",
     borderRadius: "4px",
     marginBottom: "10px",
-    width: "100%"
+    width: "100%",
   };
 
   const buttonStyle = {
@@ -168,7 +168,7 @@ function App() {
     fontWeight: "bold",
     cursor: "pointer",
     marginBottom: "10px",
-    width: "100%"
+    width: "100%",
   };
 
   // Main app container (after login)
@@ -178,19 +178,19 @@ function App() {
     padding: "20px",
     backgroundColor: "#fff",
     borderRadius: "8px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
   };
 
   const topNavStyle = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "20px"
+    marginBottom: "20px",
   };
 
   const navButtonsStyle = {
     display: "flex",
-    gap: "15px"
+    gap: "15px",
   };
 
   const subNavStyle = {
@@ -198,7 +198,7 @@ function App() {
     gap: "20px",
     borderBottom: "1px solid #ccc",
     marginBottom: "20px",
-    paddingBottom: "10px"
+    paddingBottom: "10px",
   };
 
   const subNavItemStyle = (active) => ({
@@ -206,13 +206,13 @@ function App() {
     borderBottom: active ? "3px solid #5E60CE" : "3px solid transparent",
     fontWeight: active ? "bold" : "normal",
     color: active ? "#5E60CE" : "#555",
-    padding: "5px 0"
+    padding: "5px 0",
   });
 
   const tableStyle = {
     width: "100%",
     borderCollapse: "collapse",
-    marginTop: "10px"
+    marginTop: "10px",
   };
 
   const thStyle = {
@@ -220,22 +220,25 @@ function App() {
     color: "#fff",
     padding: "10px",
     border: "1px solid #ddd",
-    textAlign: "left"
+    textAlign: "left",
   };
 
   const tdStyle = {
     padding: "10px",
-    border: "1px solid #ddd"
+    border: "1px solid #ddd",
   };
 
   const modalOverlayStyle = {
     position: "fixed",
-    top: 0, left: 0, right: 0, bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: "rgba(0,0,0,0.4)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 1000
+    zIndex: 1000,
   };
 
   const modalContentStyle = {
@@ -243,7 +246,7 @@ function App() {
     padding: "40px",
     borderRadius: "8px",
     width: "90%",
-    maxWidth: "500px"
+    maxWidth: "500px",
   };
 
   // ------------------- Auth Handlers -------------------
@@ -256,7 +259,7 @@ function App() {
     try {
       const res = await fetch("/api/login", {
         method: "POST",
-        body: formData
+        body: formData,
       });
       const data = await res.json();
       console.log("Login response:", data);
@@ -289,13 +292,13 @@ function App() {
       username: signUpEmail,
       password: signUpPassword,
       name: signUpName,
-      phone: signUpPhone
+      phone: signUpPhone,
     };
     try {
       const res = await fetch("http://localhost:8000/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(signupData)
+        body: JSON.stringify(signupData),
       });
       const data = await res.json();
       console.log("Signup response:", data);
@@ -325,7 +328,7 @@ function App() {
         ? "http://localhost:8000/tasks?all=true"
         : "http://localhost:8000/tasks";
       const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       });
       const data = await res.json();
       console.log("Fetched tasks:", data);
@@ -341,16 +344,16 @@ function App() {
       description: newTaskName,
       deadline: newTaskDeadline,
       responsible_person: newTaskResponsible,
-      start_date: newTaskStartDate
+      start_date: newTaskStartDate,
     };
     try {
       await fetch("http://localhost:8000/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newTaskObj)
+        body: JSON.stringify(newTaskObj),
       });
       setShowTaskModal(false);
       setNewTaskName("");
@@ -367,7 +370,7 @@ function App() {
     try {
       await fetch(`http://localhost:8000/tasks/${id}/complete`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       fetchTasks();
     } catch (error) {
@@ -379,21 +382,13 @@ function App() {
     try {
       await fetch(`http://localhost:8000/tasks/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       fetchTasks();
     } catch (error) {
       console.error("Delete task error:", error);
     }
   };
-
-  // ------------------- Gantt Range Utility -------------------
-  function isDayWithinRange(day, startStr, endStr) {
-    const start = parseDateStr(startStr);
-    const end = parseDateStr(endStr);
-    if (!start || !end) return false;
-    return day >= start && day <= end;
-  }
 
   // ------------------- Render Functions -------------------
   // Render the split-screen authentication page.
@@ -403,9 +398,7 @@ function App() {
         <div style={authLeftStyle}>
           <h2 style={authHeadingStyle}>Tasky</h2>
           <p style={authSubHeadingStyle}>
-            {isSignUp
-              ? "Create your account."
-              : "Welcome back! Please sign in."}
+            {isSignUp ? "Create your account." : "Welcome back! Please sign in."}
           </p>
           {isSignUp ? renderSignupForm() : renderLoginForm()}
         </div>
@@ -418,10 +411,7 @@ function App() {
 
   function renderLoginForm() {
     return (
-      <form
-        onSubmit={handleLogin}
-        style={{ display: "flex", flexDirection: "column" }}
-      >
+      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column" }}>
         {authMessage && <p style={{ color: "green" }}>{authMessage}</p>}
         <label>Email</label>
         <input
@@ -441,14 +431,11 @@ function App() {
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
         />
-        <button type="submit" style={buttonStyle}>Sign In</button>
-        <div style={{ textAlign: "center", margin: "8px 0" }}>
-          Or continue with
-        </div>
-        <button
-          type="button"
-          style={{ ...buttonStyle, backgroundColor: "#4285F4" }}
-        >
+        <button type="submit" style={buttonStyle}>
+          Sign In
+        </button>
+        <div style={{ textAlign: "center", margin: "8px 0" }}>Or continue with</div>
+        <button type="button" style={{ ...buttonStyle, backgroundColor: "#4285F4" }}>
           Log in with Google
         </button>
         <div style={{ textAlign: "center", marginTop: "10px" }}>
@@ -469,10 +456,7 @@ function App() {
 
   function renderSignupForm() {
     return (
-      <form
-        onSubmit={handleSignUp}
-        style={{ display: "flex", flexDirection: "column" }}
-      >
+      <form onSubmit={handleSignUp} style={{ display: "flex", flexDirection: "column" }}>
         {signUpError && <p style={{ color: "red" }}>{signUpError}</p>}
         {authMessage && <p style={{ color: "green" }}>{authMessage}</p>}
         <label>Full Name</label>
@@ -520,7 +504,9 @@ function App() {
           value={signUpConfirmPassword}
           onChange={(e) => setSignUpConfirmPassword(e.target.value)}
         />
-        <button type="submit" style={buttonStyle}>Sign Up</button>
+        <button type="submit" style={buttonStyle}>
+          Sign Up
+        </button>
         <div style={{ textAlign: "center", marginTop: "10px" }}>
           Already have an account?{" "}
           <span
@@ -543,19 +529,11 @@ function App() {
       <div style={topNavStyle}>
         <h2 style={{ margin: 0 }}>Tasky</h2>
         <div style={navButtonsStyle}>
-          <button
-            style={{ ...buttonStyle, width: "auto", padding: "10px 12px" }}
-            onClick={() => setShowTaskModal(true)}
-          >
+          <button style={{ ...buttonStyle, width: "auto", padding: "10px 12px" }} onClick={() => setShowTaskModal(true)}>
             + Add Task
           </button>
           <button
-            style={{
-              ...buttonStyle,
-              backgroundColor: "#EB5757",
-              width: "auto",
-              padding: "10px 12px"
-            }}
+            style={{ ...buttonStyle, backgroundColor: "#EB5757", width: "auto", padding: "10px 12px" }}
             onClick={handleLogout}
           >
             Logout
@@ -568,28 +546,16 @@ function App() {
   function renderSubNav() {
     return (
       <div style={subNavStyle}>
-        <div
-          style={subNavItemStyle(currentView === "list")}
-          onClick={() => setCurrentView("list")}
-        >
+        <div style={subNavItemStyle(currentView === "list")} onClick={() => setCurrentView("list")}>
           List
         </div>
-        <div
-          style={subNavItemStyle(currentView === "deadline")}
-          onClick={() => setCurrentView("deadline")}
-        >
+        <div style={subNavItemStyle(currentView === "deadline")} onClick={() => setCurrentView("deadline")}>
           Deadline
         </div>
-        <div
-          style={subNavItemStyle(currentView === "calendar")}
-          onClick={() => setCurrentView("calendar")}
-        >
+        <div style={subNavItemStyle(currentView === "calendar")} onClick={() => setCurrentView("calendar")}>
           Calendar
         </div>
-        <div
-          style={subNavItemStyle(currentView === "gantt")}
-          onClick={() => setCurrentView("gantt")}
-        >
+        <div style={subNavItemStyle(currentView === "gantt")} onClick={() => setCurrentView("gantt")}>
           Gantt
         </div>
       </div>
@@ -599,7 +565,6 @@ function App() {
   function renderListView() {
     return (
       <div>
-        {/* Checkbox to toggle View All */}
         <div style={{ marginBottom: "10px" }}>
           <label>
             <input
@@ -631,9 +596,7 @@ function App() {
                 <td style={tdStyle}>{t.description}</td>
                 <td style={tdStyle}>{t.completed ? "Yes" : "No"}</td>
                 <td style={tdStyle}>{t.start_date || "—"}</td>
-                <td style={tdStyle}>
-                  {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}
-                </td>
+                <td style={tdStyle}>{t.deadline ? new Date(t.deadline).toLocaleString() : "—"}</td>
                 <td style={tdStyle}>{t.responsible_person || "—"}</td>
                 <td style={tdStyle}>
                   {!t.completed && (
@@ -786,9 +749,7 @@ function App() {
     return (
       <div>
         <h3>Gantt Chart</h3>
-        <p>
-          Days between start_date and deadline are highlighted.
-        </p>
+        <p>Days between start_date and deadline are highlighted.</p>
         <table style={tableStyle}>
           <thead>
             <tr>
