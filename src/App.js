@@ -257,10 +257,16 @@ function App() {
     formData.append("username", loginEmail);
     formData.append("password", loginPassword);
     try {
-      const res = await fetch("/api/login", {
+      // Use the correct absolute URL for login
+      const res = await fetch("http://localhost:8000/login", {
         method: "POST",
         body: formData,
       });
+      if (!res.ok) {
+        console.error("HTTP error!", res.status);
+        setAuthMessage(`Login failed: HTTP ${res.status}`);
+        return;
+      }
       const data = await res.json();
       console.log("Login response:", data);
       if (data.access_token) {
@@ -323,7 +329,6 @@ function App() {
   // ------------------- Task Handlers -------------------
   const fetchTasks = async (authToken = token) => {
     try {
-      // If "viewAll" checkbox is checked, append ?all=true to fetch all tasks.
       const url = viewAll
         ? "http://localhost:8000/tasks?all=true"
         : "http://localhost:8000/tasks";
@@ -391,14 +396,16 @@ function App() {
   };
 
   // ------------------- Render Functions -------------------
-  // Render the split-screen authentication page.
+  // Render the authentication page (split-screen).
   function renderAuthPage() {
     return (
       <div style={authPageStyle}>
         <div style={authLeftStyle}>
           <h2 style={authHeadingStyle}>Tasky</h2>
           <p style={authSubHeadingStyle}>
-            {isSignUp ? "Create your account." : "Welcome back! Please sign in."}
+            {isSignUp
+              ? "Create your account."
+              : "Welcome back! Please sign in."}
           </p>
           {isSignUp ? renderSignupForm() : renderLoginForm()}
         </div>
@@ -411,7 +418,10 @@ function App() {
 
   function renderLoginForm() {
     return (
-      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column" }}>
+      <form
+        onSubmit={handleLogin}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
         {authMessage && <p style={{ color: "green" }}>{authMessage}</p>}
         <label>Email</label>
         <input
@@ -434,8 +444,13 @@ function App() {
         <button type="submit" style={buttonStyle}>
           Sign In
         </button>
-        <div style={{ textAlign: "center", margin: "8px 0" }}>Or continue with</div>
-        <button type="button" style={{ ...buttonStyle, backgroundColor: "#4285F4" }}>
+        <div style={{ textAlign: "center", margin: "8px 0" }}>
+          Or continue with
+        </div>
+        <button
+          type="button"
+          style={{ ...buttonStyle, backgroundColor: "#4285F4" }}
+        >
           Log in with Google
         </button>
         <div style={{ textAlign: "center", marginTop: "10px" }}>
@@ -456,7 +471,10 @@ function App() {
 
   function renderSignupForm() {
     return (
-      <form onSubmit={handleSignUp} style={{ display: "flex", flexDirection: "column" }}>
+      <form
+        onSubmit={handleSignUp}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
         {signUpError && <p style={{ color: "red" }}>{signUpError}</p>}
         {authMessage && <p style={{ color: "green" }}>{authMessage}</p>}
         <label>Full Name</label>
@@ -529,11 +547,19 @@ function App() {
       <div style={topNavStyle}>
         <h2 style={{ margin: 0 }}>Tasky</h2>
         <div style={navButtonsStyle}>
-          <button style={{ ...buttonStyle, width: "auto", padding: "10px 12px" }} onClick={() => setShowTaskModal(true)}>
+          <button
+            style={{ ...buttonStyle, width: "auto", padding: "10px 12px" }}
+            onClick={() => setShowTaskModal(true)}
+          >
             + Add Task
           </button>
           <button
-            style={{ ...buttonStyle, backgroundColor: "#EB5757", width: "auto", padding: "10px 12px" }}
+            style={{
+              ...buttonStyle,
+              backgroundColor: "#EB5757",
+              width: "auto",
+              padding: "10px 12px",
+            }}
             onClick={handleLogout}
           >
             Logout
@@ -546,16 +572,28 @@ function App() {
   function renderSubNav() {
     return (
       <div style={subNavStyle}>
-        <div style={subNavItemStyle(currentView === "list")} onClick={() => setCurrentView("list")}>
+        <div
+          style={subNavItemStyle(currentView === "list")}
+          onClick={() => setCurrentView("list")}
+        >
           List
         </div>
-        <div style={subNavItemStyle(currentView === "deadline")} onClick={() => setCurrentView("deadline")}>
+        <div
+          style={subNavItemStyle(currentView === "deadline")}
+          onClick={() => setCurrentView("deadline")}
+        >
           Deadline
         </div>
-        <div style={subNavItemStyle(currentView === "calendar")} onClick={() => setCurrentView("calendar")}>
+        <div
+          style={subNavItemStyle(currentView === "calendar")}
+          onClick={() => setCurrentView("calendar")}
+        >
           Calendar
         </div>
-        <div style={subNavItemStyle(currentView === "gantt")} onClick={() => setCurrentView("gantt")}>
+        <div
+          style={subNavItemStyle(currentView === "gantt")}
+          onClick={() => setCurrentView("gantt")}
+        >
           Gantt
         </div>
       </div>
@@ -596,19 +634,31 @@ function App() {
                 <td style={tdStyle}>{t.description}</td>
                 <td style={tdStyle}>{t.completed ? "Yes" : "No"}</td>
                 <td style={tdStyle}>{t.start_date || "—"}</td>
-                <td style={tdStyle}>{t.deadline ? new Date(t.deadline).toLocaleString() : "—"}</td>
+                <td style={tdStyle}>
+                  {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}
+                </td>
                 <td style={tdStyle}>{t.responsible_person || "—"}</td>
                 <td style={tdStyle}>
                   {!t.completed && (
                     <button
-                      style={{ ...buttonStyle, width: "auto", padding: "8px 10px", marginRight: "5px" }}
+                      style={{
+                        ...buttonStyle,
+                        width: "auto",
+                        padding: "8px 10px",
+                        marginRight: "5px",
+                      }}
                       onClick={() => handleCompleteTask(t.id)}
                     >
                       Complete
                     </button>
                   )}
                   <button
-                    style={{ ...buttonStyle, backgroundColor: "#EB5757", width: "auto", padding: "8px 10px" }}
+                    style={{
+                      ...buttonStyle,
+                      backgroundColor: "#EB5757",
+                      width: "auto",
+                      padding: "8px 10px",
+                    }}
                     onClick={() => handleDeleteTask(t.id)}
                   >
                     Delete
@@ -623,11 +673,19 @@ function App() {
   }
 
   function renderDeadlineView() {
-    const { dueToday, dueThisWeek, dueNextWeek, future } = categorizeTasksByDeadline(tasks);
+    const { dueToday, dueThisWeek, dueNextWeek, future } =
+      categorizeTasksByDeadline(tasks);
     return (
       <div>
         <h3>Deadline Overview</h3>
-        <div style={{ display: "flex", gap: "20px", marginTop: "20px", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            marginTop: "20px",
+            flexWrap: "wrap",
+          }}
+        >
           <div style={{ flex: 1, minWidth: "200px" }}>
             <h4>Due Today</h4>
             {dueToday.length === 0 && <p>No tasks due today.</p>}
@@ -635,7 +693,10 @@ function App() {
               <div key={t.id} style={{ marginBottom: "10px" }}>
                 <strong>{t.description}</strong>
                 <div>Start: {t.start_date || "Today"}</div>
-                <div>Deadline: {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}</div>
+                <div>
+                  Deadline:{" "}
+                  {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}
+                </div>
               </div>
             ))}
           </div>
@@ -646,7 +707,10 @@ function App() {
               <div key={t.id} style={{ marginBottom: "10px" }}>
                 <strong>{t.description}</strong>
                 <div>Start: {t.start_date || "Today"}</div>
-                <div>Deadline: {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}</div>
+                <div>
+                  Deadline:{" "}
+                  {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}
+                </div>
               </div>
             ))}
           </div>
@@ -657,7 +721,10 @@ function App() {
               <div key={t.id} style={{ marginBottom: "10px" }}>
                 <strong>{t.description}</strong>
                 <div>Start: {t.start_date || "Today"}</div>
-                <div>Deadline: {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}</div>
+                <div>
+                  Deadline:{" "}
+                  {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}
+                </div>
               </div>
             ))}
           </div>
@@ -668,7 +735,10 @@ function App() {
               <div key={t.id} style={{ marginBottom: "10px" }}>
                 <strong>{t.description}</strong>
                 <div>Start: {t.start_date || "Today"}</div>
-                <div>Deadline: {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}</div>
+                <div>
+                  Deadline:{" "}
+                  {t.deadline ? new Date(t.deadline).toLocaleString() : "—"}
+                </div>
               </div>
             ))}
           </div>
@@ -681,6 +751,7 @@ function App() {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
+
     function getTasksForDate(date) {
       return tasks.filter((t) => {
         const dl = parseDateStr(t.deadline);
@@ -692,12 +763,14 @@ function App() {
         );
       });
     }
+
     const allDates = getCalendarDates(year, month);
     const weeks = [];
     for (let i = 0; i < 6; i++) {
       weeks.push(allDates.slice(i * 7, i * 7 + 7));
     }
     const dayHeader = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
     return (
       <div>
         <h3>Calendar View</h3>
@@ -766,7 +839,11 @@ function App() {
               <tr key={t.id}>
                 <td style={tdStyle}>{t.description}</td>
                 {daysInMonth.map((day) => {
-                  const highlight = isDayWithinRange(day, t.start_date, t.deadline);
+                  const highlight = isDayWithinRange(
+                    day,
+                    t.start_date,
+                    t.deadline
+                  );
                   return (
                     <td
                       key={day.toISOString()}
@@ -830,7 +907,11 @@ function App() {
               </button>{" "}
               <button
                 type="button"
-                style={{ ...buttonStyle, backgroundColor: "#EB5757", width: "auto" }}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#EB5757",
+                  width: "auto",
+                }}
                 onClick={() => setShowTaskModal(false)}
               >
                 Cancel
